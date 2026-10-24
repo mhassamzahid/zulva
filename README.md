@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Zulva storefront
 
-## Getting Started
-
-First, run the development server:
+Next.js 16 (App Router) storefront for zulva.pk: herbal hair oil and herbal shampoo.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Environment
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Variable | Purpose |
+| --- | --- |
+| `NEXT_PUBLIC_WHATSAPP_NUMBER` | Digits only, international format (e.g. `923001234567`). Until set, WhatsApp links fall back to `/contact`. |
+| `NEWSLETTER_WEBHOOK_URL` | POST endpoint that receives `{ email, source }`. Until set, the form says sign-up isn't connected. |
+| `NEXT_PUBLIC_SITE_URL` | Canonical URL for metadata and the sitemap. Defaults to `https://zulva.pk`. |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Where things live
 
-## Learn More
+- `src/lib/catalog.ts`: products and categories. **Mock data** built from the
+  Shopify storefront snapshot in `resources/` and the product labels. Prices,
+  handles and Shopify variant IDs match the live store. Swap the getters for
+  Storefront API queries returning the same `Product` shape.
+- `src/lib/site.ts`: verified store facts (delivery fee, PCSIR, social links, policy URLs).
+- `src/lib/checkout.ts`: checkout hands the bag to Shopify via a cart
+  permalink (`zulva.pk/cart/<variant>:<qty>`), so payment methods and delivery
+  options come from the merchant's Shopify settings.
+- `src/components/cart/`: localStorage-backed cart store, drawer, add-to-bag buttons.
+- `src/app/globals.css`: palette and type tokens.
 
-To learn more about Next.js, take a look at the following resources:
+## Content rules
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Only publish facts the business has confirmed. There are no reviews, ratings,
+"best seller" badges, stock counts, delivery-time promises or payment-method
+claims, because none were supplied.

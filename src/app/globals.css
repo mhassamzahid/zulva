@@ -1,26 +1,186 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
+/*
+  Zulva palette — taken from the packaging and the studio photography.
+  stone     the concrete the bottles are shot on, lifted for reading
+  ink       near-black with the navy of the shampoo label in it
+  indigo    shampoo label
+  amber     the oil, seen through its bottle
+  foil      gold leaf on both labels (decorative / on dark only)
+*/
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --stone: #e8e6e1;
+  --stone-2: #dcd9d2;
+  --stone-3: #cbc7be;
+  --concrete: #7f7e7b;
+  --ink: #161a2b;
+  --ink-soft: #4e5160;
+  --indigo: #1c2856;
+  --indigo-deep: #131c40;
+  --amber: #5a3412;
+  --amber-deep: #3f240c;
+  --foil: #c9a45c;
+  --foil-ink: #7a5c22;
+  --line: color-mix(in oklab, var(--ink) 14%, transparent);
+
+  --background: var(--stone);
+  --foreground: var(--ink);
+  --card: var(--stone);
+  --card-foreground: var(--ink);
+  --popover: var(--stone);
+  --popover-foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: var(--stone);
+  --secondary: var(--stone-2);
+  --secondary-foreground: var(--ink);
+  --muted: var(--stone-2);
+  --muted-foreground: var(--ink-soft);
+  --accent: var(--stone-2);
+  --accent-foreground: var(--ink);
+  --destructive: #9b2c1f;
+  --border: var(--line);
+  --input: var(--stone-3);
+  --ring: var(--indigo);
+  --radius: 0.25rem;
+
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-stone: var(--stone);
+  --color-stone-2: var(--stone-2);
+  --color-stone-3: var(--stone-3);
+  --color-concrete: var(--concrete);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-indigo: var(--indigo);
+  --color-indigo-deep: var(--indigo-deep);
+  --color-amber: var(--amber);
+  --color-amber-deep: var(--amber-deep);
+  --color-foil: var(--foil);
+  --color-foil-ink: var(--foil-ink);
+  --color-line: var(--line);
+
+  --font-sans: var(--font-instrument);
+  --font-display: var(--font-marcellus);
+  --font-heading: var(--font-marcellus);
+
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+
+  --ease-quint: var(--ease-out-quint);
+
+  /* Type scale, 1.333 ratio anchored on 16px */
+  --text-display: clamp(2.75rem, 1.6rem + 5.2vw, 6.25rem);
+  --text-display--line-height: 1;
+  --text-display--letter-spacing: -0.015em;
+  --text-headline: clamp(2rem, 1.4rem + 2.6vw, 3.5rem);
+  --text-headline--line-height: 1.05;
+  --text-headline--letter-spacing: -0.01em;
+  --text-title: clamp(1.5rem, 1.25rem + 1vw, 2.125rem);
+  --text-title--line-height: 1.15;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "ss01", "cv11";
+  }
+  ::selection {
+    background: var(--indigo);
+    color: var(--stone);
+  }
+  :focus-visible {
+    outline: 2px solid var(--indigo);
+    outline-offset: 3px;
+  }
+  .tone-dark :focus-visible {
+    outline-color: var(--foil);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@utility container-page {
+  width: 100%;
+  margin-inline: auto;
+  max-width: 92rem;
+  padding-inline: 1rem;
+  @media (width >= 48rem) {
+    padding-inline: 2rem;
+  }
+  @media (width >= 80rem) {
+    padding-inline: 3rem;
+  }
+}
+
+/* Underline that draws in from the left; for navigation-style links. */
+@utility link-draw {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.45s var(--ease-out-quint);
+  &:hover,
+  &:focus-visible,
+  &[aria-current="page"] {
+    background-size: 100% 1px;
+  }
+}
+
+/* Persistent underline for links inside sentences and secondary actions. */
+@utility link-under {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
+  text-decoration-color: color-mix(in oklab, currentColor 40%, transparent);
+  transition: text-decoration-color 0.3s;
+  &:hover {
+    text-decoration-color: currentColor;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* Motion writes inline styles; show content in its final state instead. */
+  [data-motion] {
+    clip-path: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
 }
